@@ -1,322 +1,313 @@
-html<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leadership Competencies Matching Game</title>
+    <title>Competency Framework Drag & Drop Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
             margin: 0;
             padding: 20px;
+            background-color: #f5f5f5;
         }
-        
+
         .game-container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        
+
         .title {
             text-align: center;
-            color: #2c5aa0;
+            color: #333;
             margin-bottom: 30px;
-            font-size: 24px;
         }
-        
+
         .instructions {
-            background: #e8f4f8;
+            background-color: #e8f4fd;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-bottom: 20px;
-            border-left: 4px solid #2c5aa0;
+            text-align: center;
         }
-        
-        .categories {
+
+        .competency-areas {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
+            gap: 20px;
             margin-bottom: 30px;
         }
-        
-        .category {
-            background: #f8f9fa;
-            border: 2px dashed #ccc;
-            border-radius: 8px;
-            padding: 15px;
+
+        .competency-area {
+            border-radius: 10px;
+            padding: 20px;
             min-height: 200px;
-            transition: all 0.3s ease;
+            position: relative;
         }
-        
-        .category.drag-over {
-            border-color: #28a745;
-            background-color: #e8f5e9;
+
+        .policy-development {
+            background-color: #fff2cc;
+            border: 2px solid #d4af37;
         }
-        
-        .category h3 {
-            margin-top: 0;
-            padding: 10px;
-            border-radius: 5px;
-            color: white;
-            text-align: center;
+
+        .advocacy-organizing {
+            background-color: #e8f5e8;
+            border: 2px solid #4caf50;
+        }
+
+        .communications {
+            background-color: #e3f2fd;
+            border: 2px solid #2196f3;
+        }
+
+        .leadership {
+            background-color: #fce4ec;
+            border: 2px solid #e91e63;
+        }
+
+        .area-title {
+            font-weight: bold;
             font-size: 16px;
             margin-bottom: 15px;
+            text-align: center;
         }
-        
-        .policy { background-color: #3498db; }
-        .advocacy { background-color: #27ae60; }
-        .communications { background-color: #e74c3c; }
-        .leadership { background-color: #f39c12; }
-        
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+
+        .drop-zone {
+            min-height: 150px;
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
         }
-        
-        .card {
-            background: #fff;
+
+        .drop-zone.drag-over {
+            border-color: #007bff;
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+
+        .skills-bank {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
             border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
+        }
+
+        .skills-bank h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .skill-item {
+            background-color: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 20px;
+            padding: 8px 15px;
             cursor: grab;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             user-select: none;
+            transition: all 0.3s ease;
+            font-size: 14px;
         }
-        
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+
+        .skill-item:hover {
+            background-color: #e9ecef;
+            transform: scale(1.05);
         }
-        
-        .card.dragging {
+
+        .skill-item.dragging {
             opacity: 0.5;
-            transform: rotate(5deg);
             cursor: grabbing;
         }
-        
-        .card.correct {
+
+        .skill-item.correct {
+            background-color: #d4edda;
             border-color: #28a745;
-            background-color: #e8f5e9;
-        }
-        
-        .button-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-        
-        .btn {
-            background: #2c5aa0;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 0 10px;
-            font-size: 16px;
-        }
-        
-        .btn:hover {
-            background: #1a4480;
-        }
-        
-        .btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        
-        .feedback {
-            text-align: center;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-            font-weight: bold;
-        }
-        
-        .feedback.success {
-            background: #d4edda;
             color: #155724;
-            border: 1px solid #c3e6cb;
         }
-        
-        .feedback.error {
-            background: #f8d7da;
+
+        .skill-item.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545;
             color: #721c24;
-            border: 1px solid #f5c6cb;
+            animation: shake 0.5s ease-in-out;
         }
-        
-        .score {
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .score-board {
             text-align: center;
+            margin: 20px 0;
             font-size: 18px;
             font-weight: bold;
-            color: #2c5aa0;
+        }
+
+        .reset-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 30px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .reset-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .feedback {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .feedback.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <h1 class="title">Leadership Competencies Matching Game</h1>
+        <h1 class="title">Competency Framework Drag & Drop Game</h1>
         
         <div class="instructions">
-            <p><strong>Instructions:</strong> Drag each competency card to the correct category. When you're ready, click "Check Answers" to see how you did!</p>
+            <p><strong>Instructions:</strong> Drag the skills from the bank below and drop them into the correct competency area. Each skill belongs to one specific competency!</p>
         </div>
-        
-        <div class="categories">
-            <div class="category" data-category="policy">
-                <h3 class="policy">Policy Development and Analysis</h3>
-                <div class="drop-zone"></div>
+
+        <div class="score-board">
+            <span>Correct: <span id="correct-count">0</span></span> | 
+            <span>Total Skills: <span id="total-count">20</span></span>
+        </div>
+
+        <div class="competency-areas">
+            <div class="competency-area policy-development" data-category="policy">
+                <div class="area-title">Policy Development and Analysis</div>
+                <div class="drop-zone" data-category="policy"></div>
             </div>
-            <div class="category" data-category="advocacy">
-                <h3 class="advocacy">Advocacy and Organizing</h3>
-                <div class="drop-zone"></div>
+
+            <div class="competency-area advocacy-organizing" data-category="advocacy">
+                <div class="area-title">Advocacy and Organizing</div>
+                <div class="drop-zone" data-category="advocacy"></div>
             </div>
-            <div class="category" data-category="communications">
-                <h3 class="communications">Communications and Messaging</h3>
-                <div class="drop-zone"></div>
+
+            <div class="competency-area communications" data-category="communications">
+                <div class="area-title">Communications and Messaging</div>
+                <div class="drop-zone" data-category="communications"></div>
             </div>
-            <div class="category" data-category="leadership">
-                <h3 class="leadership">Effective and Empathetic Leadership</h3>
-                <div class="drop-zone"></div>
+
+            <div class="competency-area leadership" data-category="leadership">
+                <div class="area-title">Effective and Empathetic Leadership</div>
+                <div class="drop-zone" data-category="leadership"></div>
             </div>
         </div>
-        
-        <div class="cards-container" id="cardsContainer">
-            <!-- Cards will be inserted here by JavaScript -->
+
+        <div class="skills-bank">
+            <h3>Skills Bank - Drag these skills to the correct competency area!</h3>
+            <div class="skills-container" id="skills-container">
+                <!-- Skills will be populated by JavaScript -->
+            </div>
         </div>
-        
-        <div class="button-container">
-            <button class="btn" onclick="shuffleCards()">Shuffle Cards</button>
-            <button class="btn" onclick="checkAnswers()">Check Answers</button>
-            <button class="btn" onclick="resetGame()">Reset Game</button>
-        </div>
-        
+
         <div id="feedback" class="feedback" style="display: none;"></div>
-        <div id="score" class="score"></div>
+        
+        <button class="reset-btn" onclick="resetGame()">Reset Game</button>
     </div>
 
     <script>
-        const competencies = [
-            {
-                text: "Draws on diverse perspectives to inform education policy development and analysis.",
-                category: "policy"
-            },
-            {
-                text: "Interprets, explains, and uses the formal language found in policy documents.",
-                category: "policy"
-            },
-            {
-                text: "Understands how and when to use primary and secondary research and evidence as part of a comprehensive advocacy strategy.",
-                category: "policy"
-            },
-            {
-                text: "Identifies potential inequitable impacts, barriers to implementation, downstream impacts, and unintended consequences of policy proposals.",
-                category: "advocacy"
-            },
-            {
-                text: "Understands how to map power and build power to influence decision-makers.",
-                category: "advocacy"
-            },
-            {
-                text: "Makes meaningful connections between personal stories and policy asks or recommendations.",
-                category: "advocacy"
-            },
-            {
-                text: "Identifies and understands all key stakeholders, including those impacted by policy change, with keen attention to those from marginalized communities.",
-                category: "advocacy"
-            },
-            {
-                text: "Develops a campaign plan with multiple phases that advances policy goals and is designed for impact.",
-                category: "communications"
-            },
-            {
-                text: "Builds and engages in strategic partnerships, networks, and coalitions around shared values and goals.",
-                category: "communications"
-            },
-            {
-                text: "Understands how race and power dynamics can impact differences of perspective and opinion.",
-                category: "communications"
-            },
-            {
-                text: "Selects language that is vivid, impactful, respectful, and appropriate to the audience.",
-                category: "communications"
-            },
-            {
-                text: "Takes an asset-based and ethical approach to stories, without exploiting others' trauma.",
-                category: "communications"
-            },
-            {
-                text: "Understands the role and value of different communication strategies (op-eds, earned media or social media, legislative briefings, speeches at rallies and events, testimony, etc.).",
-                category: "communications"
-            },
-            {
-                text: "Models vulnerability and willingness to critically examine one's own words and actions.",
-                category: "leadership"
-            },
-            {
-                text: "Displays persistence and resilience in the face of setbacks.",
-                category: "leadership"
-            },
-            {
-                text: "Appropriately balances project goals with team development and satisfaction.",
-                category: "leadership"
-            }
+        // Define skills and their correct categories
+        const skills = [
+            // Policy Development and Analysis
+            { text: "Research and data analysis", category: "policy" },
+            { text: "Policy document interpretation", category: "policy" },
+            { text: "Impact assessment", category: "policy" },
+            { text: "Legislative knowledge", category: "policy" },
+            { text: "Evidence-based recommendations", category: "policy" },
+
+            // Advocacy and Organizing
+            { text: "Stakeholder mapping", category: "advocacy" },
+            { text: "Coalition building", category: "advocacy" },
+            { text: "Community engagement", category: "advocacy" },
+            { text: "Network development", category: "advocacy" },
+            { text: "Strategic partnerships", category: "advocacy" },
+
+            // Communications and Messaging
+            { text: "Message crafting", category: "communications" },
+            { text: "Storytelling techniques", category: "communications" },
+            { text: "Media relations", category: "communications" },
+            { text: "Audience targeting", category: "communications" },
+            { text: "Digital communication", category: "communications" },
+
+            // Leadership
+            { text: "Team motivation", category: "leadership" },
+            { text: "Conflict resolution", category: "leadership" },
+            { text: "Emotional intelligence", category: "leadership" },
+            { text: "Resilience building", category: "leadership" },
+            { text: "Goal setting and achievement", category: "leadership" }
         ];
 
-        let currentCards = [];
+        let correctCount = 0;
 
-        function createCards() {
-            const container = document.getElementById('cardsContainer');
-            container.innerHTML = '';
+        // Initialize the game
+        function initGame() {
+            const skillsContainer = document.getElementById('skills-container');
+            skillsContainer.innerHTML = '';
             
-            currentCards = [...competencies];
-            shuffleArray(currentCards);
+            // Shuffle skills for randomization
+            const shuffledSkills = [...skills].sort(() => Math.random() - 0.5);
             
-            currentCards.forEach((competency, index) => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.draggable = true;
-                card.dataset.category = competency.category;
-                card.dataset.index = index;
-                card.textContent = competency.text;
+            shuffledSkills.forEach((skill, index) => {
+                const skillElement = document.createElement('div');
+                skillElement.className = 'skill-item';
+                skillElement.draggable = true;
+                skillElement.textContent = skill.text;
+                skillElement.dataset.category = skill.category;
+                skillElement.dataset.id = index;
                 
-                card.addEventListener('dragstart', handleDragStart);
-                card.addEventListener('dragend', handleDragEnd);
+                skillElement.addEventListener('dragstart', handleDragStart);
+                skillElement.addEventListener('dragend', handleDragEnd);
                 
-                container.appendChild(card);
+                skillsContainer.appendChild(skillElement);
             });
-        }
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
+            // Set up drop zones
+            const dropZones = document.querySelectorAll('.drop-zone');
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('drop', handleDrop);
+                zone.addEventListener('dragenter', handleDragEnter);
+                zone.addEventListener('dragleave', handleDragLeave);
+            });
+
+            correctCount = 0;
+            updateScore();
+            document.getElementById('feedback').style.display = 'none';
         }
 
         function handleDragStart(e) {
             e.target.classList.add('dragging');
-            e.dataTransfer.setData('text/plain', e.target.dataset.index);
+            e.dataTransfer.setData('text/plain', e.target.dataset.id);
+            e.dataTransfer.setData('category', e.target.dataset.category);
         }
 
         function handleDragEnd(e) {
             e.target.classList.remove('dragging');
-        }
-
-        function setupDropZones() {
-            const categories = document.querySelectorAll('.category');
-            
-            categories.forEach(category => {
-                category.addEventListener('dragover', handleDragOver);
-                category.addEventListener('drop', handleDrop);
-                category.addEventListener('dragenter', handleDragEnter);
-                category.addEventListener('dragleave', handleDragLeave);
-            });
         }
 
         function handleDragOver(e) {
@@ -325,98 +316,80 @@ html<!DOCTYPE html>
 
         function handleDragEnter(e) {
             e.preventDefault();
-            e.currentTarget.classList.add('drag-over');
+            e.target.classList.add('drag-over');
         }
 
         function handleDragLeave(e) {
-            if (!e.currentTarget.contains(e.relatedTarget)) {
-                e.currentTarget.classList.remove('drag-over');
-            }
+            e.target.classList.remove('drag-over');
         }
 
         function handleDrop(e) {
             e.preventDefault();
-            e.currentTarget.classList.remove('drag-over');
+            e.target.classList.remove('drag-over');
             
-            const cardIndex = e.dataTransfer.getData('text/plain');
-            const card = document.querySelector(`[data-index="${cardIndex}"]`);
-            const dropZone = e.currentTarget.querySelector('.drop-zone') || e.currentTarget;
+            const skillCategory = e.dataTransfer.getData('category');
+            const skillId = e.dataTransfer.getData('text/plain');
+            const dropZoneCategory = e.target.dataset.category;
+            const skillElement = document.querySelector(`[data-id="${skillId}"]`);
             
-            if (card && !dropZone.querySelector('h3')) {
-                dropZone.appendChild(card);
+            if (skillCategory === dropZoneCategory) {
+                // Correct drop
+                skillElement.classList.add('correct');
+                skillElement.classList.remove('incorrect');
+                e.target.appendChild(skillElement);
+                correctCount++;
+                updateScore();
+                
+                // Check if game is complete
+                if (correctCount === skills.length) {
+                    showFeedback('🎉 Congratulations! You\'ve correctly matched all skills!', 'success');
+                }
+            } else {
+                // Incorrect drop
+                skillElement.classList.add('incorrect');
+                setTimeout(() => {
+                    skillElement.classList.remove('incorrect');
+                }, 1000);
             }
         }
 
-        function checkAnswers() {
-            const categories = document.querySelectorAll('.category');
-            let correct = 0;
-            let total = 0;
-            
-            categories.forEach(category => {
-                const categoryType = category.dataset.category;
-                const cards = category.querySelectorAll('.card');
-                
-                cards.forEach(card => {
-                    total++;
-                    if (card.dataset.category === categoryType) {
-                        card.classList.add('correct');
-                        correct++;
-                    } else {
-                        card.classList.remove('correct');
-                        card.style.borderColor = '#dc3545';
-                        card.style.backgroundColor = '#f8d7da';
-                    }
-                });
-            });
-            
+        function updateScore() {
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('total-count').textContent = skills.length;
+        }
+
+        function showFeedback(message, type) {
             const feedback = document.getElementById('feedback');
-            const score = document.getElementById('score');
-            
-            score.textContent = `Score: ${correct}/${total} correct`;
-            
-            if (correct === total) {
-                feedback.className = 'feedback success';
-                feedback.textContent = 'Excellent! You matched all competencies correctly!';
-            } else {
-                feedback.className = 'feedback error';
-                feedback.textContent = `You got ${correct} out of ${total} correct. Red borders show incorrect placements.`;
-            }
-            
+            feedback.textContent = message;
+            feedback.className = `feedback ${type}`;
             feedback.style.display = 'block';
         }
 
-        function shuffleCards() {
-            const container = document.getElementById('cardsContainer');
-            const cards = Array.from(container.children);
-            
-            // Clear any previous feedback
-            document.getElementById('feedback').style.display = 'none';
-            document.getElementById('score').textContent = '';
-            
-            // Reset card styles
-            cards.forEach(card => {
-                card.className = 'card';
-                card.style.borderColor = '';
-                card.style.backgroundColor = '';
-            });
-            
-            // Move all cards back to container and shuffle
-            cards.forEach(card => container.appendChild(card));
-            shuffleArray(cards);
-            cards.forEach(card => container.appendChild(card));
-        }
-
         function resetGame() {
-            document.getElementById('feedback').style.display = 'none';
-            document.getElementById('score').textContent = '';
-            createCards();
+            // Clear all drop zones completely
+            const dropZones = document.querySelectorAll('.drop-zone');
+            dropZones.forEach(zone => {
+                zone.innerHTML = '';
+            });
+
+            // Clear the skills container
+            const skillsContainer = document.getElementById('skills-container');
+            skillsContainer.innerHTML = '';
+
+            // Reset counter
+            correctCount = 0;
+
+            // Hide and reset feedback
+            const feedback = document.getElementById('feedback');
+            feedback.style.display = 'none';
+            feedback.className = 'feedback';
+
+            // Rebuild the entire game from scratch
+            initGame();
         }
 
-        // Initialize the game
-        document.addEventListener('DOMContentLoaded', function() {
-            createCards();
-            setupDropZones();
-        });
+        // Start the game when page loads
+        window.addEventListener('load', initGame);
     </script>
 </body>
 </html>
