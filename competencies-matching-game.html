@@ -51,15 +51,15 @@
 
         .competency-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 20px;
             margin-bottom: 40px;
         }
 
         .competency-area {
             border-radius: 15px;
-            padding: 20punching;
-            min-height: 250px;
+            padding: 20px;
+            min-height: 300px;
             position: relative;
             transition: all 0.3s ease;
         }
@@ -95,11 +95,13 @@
             background: rgba(255, 255, 255, 0.5);
             border: 2px dashed rgba(0, 0, 0, 0.2);
             border-radius: 10px;
-            min-height: 180px;
+            min-height: 220px;
             padding: 10px;
             display: flex;
             flex-direction: column;
             gap: 8px;
+            overflow-y: auto;
+            max-height: 400px;
         }
 
         .drop-zone.drag-over {
@@ -123,27 +125,27 @@
         }
 
         .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            min-height: 100px;
-            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+            padding: 15px;
             background: white;
             border-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
         .skill-item {
             background: white;
             border: 2px solid #ddd;
             border-radius: 8px;
-            padding: 10px 15px;
+            padding: 12px 15px;
             cursor: move;
             transition: all 0.3s ease;
-            font-size: 0.95em;
-            max-width: 250px;
-            text-align: center;
+            font-size: 0.9em;
+            text-align: left;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            line-height: 1.4;
         }
 
         .skill-item:hover {
@@ -237,8 +239,35 @@
             display: block;
         }
 
+        /* Scrollbar styling */
+        .skills-container::-webkit-scrollbar,
+        .drop-zone::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .skills-container::-webkit-scrollbar-track,
+        .drop-zone::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .skills-container::-webkit-scrollbar-thumb,
+        .drop-zone::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        .skills-container::-webkit-scrollbar-thumb:hover,
+        .drop-zone::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
         @media (max-width: 768px) {
             .competency-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .skills-container {
                 grid-template-columns: 1fr;
             }
             
@@ -293,24 +322,79 @@
     </div>
 
     <script>
-        // Define skills and their correct categories
+        // Define skills with exact wording and their correct categories
         const skills = [
-            { text: "Diverse perspectives in policy", category: "policy" },
-            { text: "Policy document interpretation", category: "policy" },
-            { text: "Identify inequitable impacts", category: "policy" },
-            { text: "Research and evidence use", category: "policy" },
-            { text: "Map and build power", category: "advocacy" },
-            { text: "Campaign planning", category: "advocacy" },
-            { text: "Stakeholder identification", category: "advocacy" },
-            { text: "Strategic partnerships", category: "advocacy" },
-            { text: "Vivid and impactful language", category: "communications" },
-            { text: "Communication strategies", category: "communications" },
-            { text: "Asset-based storytelling", category: "communications" },
-            { text: "Connect stories to policy", category: "communications" },
-            { text: "Models vulnerability", category: "leadership" },
-            { text: "Persistence and resilience", category: "leadership" },
-            { text: "Balance goals and team", category: "leadership" },
-            { text: "Race and power dynamics", category: "leadership" }
+            // Policy Development and Analysis
+            { 
+                text: "Draws on diverse perspectives to inform education policy development and analysis.",
+                category: "policy"
+            },
+            { 
+                text: "Interprets, explains, and uses the formal language found in policy documents.",
+                category: "policy"
+            },
+            { 
+                text: "Identifies potential inequitable impacts, barriers to implementation, downstream impacts, and unintended consequences of policy proposals.",
+                category: "policy"
+            },
+            { 
+                text: "Understands how and when to use primary and secondary research and evidence as part of a comprehensive advocacy strategy.",
+                category: "policy"
+            },
+            
+            // Advocacy and Organizing
+            { 
+                text: "Understands how to map power and build power to influence decision-makers.",
+                category: "advocacy"
+            },
+            { 
+                text: "Develops a campaign plan with multiple phases that advances policy goals and is designed for impact.",
+                category: "advocacy"
+            },
+            { 
+                text: "Identifies and understands all key stakeholders, including those impacted by policy change, with a keen attention to those from marginalized communities.",
+                category: "advocacy"
+            },
+            { 
+                text: "Builds and engages in strategic partnerships, networks, and coalitions around shared values and goals.",
+                category: "advocacy"
+            },
+            
+            // Communications and Messaging
+            { 
+                text: "Selects language that is vivid, impactful, respectful, and appropriate to the audience.",
+                category: "communications"
+            },
+            { 
+                text: "Understands the role and value of different communication strategies (op-eds, earned media, social media, legislative briefings, speeches at rallies and events).",
+                category: "communications"
+            },
+            { 
+                text: "Takes an asset-based and ethical approach to stories, without exploiting others' trauma.",
+                category: "communications"
+            },
+            { 
+                text: "Makes meaningful connections between personal stories and policy asks or recommendations.",
+                category: "communications"
+            },
+            
+            // Effective and Empathetic Leadership
+            { 
+                text: "Models vulnerability and willingness to critically examine one's own words and actions.",
+                category: "leadership"
+            },
+            { 
+                text: "Displays persistence and resilience in the face of setbacks.",
+                category: "leadership"
+            },
+            { 
+                text: "Appropriately balances project goals with team development and satisfaction.",
+                category: "leadership"
+            },
+            { 
+                text: "Understands how race and power dynamics can impact differences of perspective and opinion.",
+                category: "leadership"
+            }
         ];
 
         let draggedElement = null;
@@ -344,6 +428,11 @@
                 zone.addEventListener('drop', handleDrop);
                 zone.addEventListener('dragleave', handleDragLeave);
             });
+            
+            // Also allow dropping back to skills container
+            container.addEventListener('dragover', handleDragOver);
+            container.addEventListener('drop', handleDropToBank);
+            container.addEventListener('dragleave', handleDragLeave);
         }
 
         function handleDragStart(e) {
@@ -370,7 +459,7 @@
             e.preventDefault();
             e.currentTarget.classList.remove('drag-over');
             
-            if (draggedElement) {
+            if (draggedElement && e.currentTarget.classList.contains('drop-zone')) {
                 // Remove any existing status classes
                 draggedElement.classList.remove('correct', 'incorrect');
                 
@@ -378,20 +467,40 @@
                 e.currentTarget.appendChild(draggedElement);
                 draggedElement = null;
                 
-                // Update count
-                updateCorrectCount();
+                // Clear feedback when moving items
+                document.getElementById('feedback').className = 'feedback-message';
+            }
+        }
+
+        function handleDropToBank(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+            
+            if (draggedElement && e.currentTarget.classList.contains('skills-container')) {
+                // Remove any existing status classes
+                draggedElement.classList.remove('correct', 'incorrect');
+                
+                // Add the skill back to the bank
+                e.currentTarget.appendChild(draggedElement);
+                draggedElement = null;
+                
+                // Clear feedback when moving items
+                document.getElementById('feedback').className = 'feedback-message';
             }
         }
 
         function checkAnswers() {
             let allCorrect = true;
             correctCount = 0;
+            let totalPlaced = 0;
             
+            // Check all skills
             document.querySelectorAll('.skill-item').forEach(skill => {
-                const parentZone = skill.parentElement;
+                const parentElement = skill.parentElement;
                 
-                if (parentZone && parentZone.classList.contains('drop-zone')) {
-                    const zoneCategory = parentZone.dataset.zone;
+                if (parentElement && parentElement.classList.contains('drop-zone')) {
+                    totalPlaced++;
+                    const zoneCategory = parentElement.dataset.zone;
                     const skillCategory = skill.dataset.category;
                     
                     if (zoneCategory === skillCategory) {
@@ -403,6 +512,9 @@
                         skill.classList.add('incorrect');
                         allCorrect = false;
                     }
+                } else {
+                    // Skill is still in the bank
+                    skill.classList.remove('correct', 'incorrect');
                 }
             });
             
@@ -413,22 +525,19 @@
             const feedback = document.getElementById('feedback');
             feedback.className = 'feedback-message';
             
-            if (correctCount === skills.length) {
+            if (totalPlaced === 0) {
+                feedback.textContent = 'Please drag some skills into the competency areas first!';
+                feedback.classList.add('error');
+            } else if (correctCount === skills.length) {
                 feedback.textContent = '🎉 Congratulations! You matched all skills correctly!';
                 feedback.classList.add('success');
             } else if (correctCount > 0) {
-                feedback.textContent = `Good progress! You have ${correctCount} correct out of ${skills.length}. Keep trying!`;
+                feedback.textContent = `Good progress! You have ${correctCount} correct out of ${totalPlaced} placed (${skills.length} total). Keep trying!`;
                 feedback.classList.add('error');
             } else {
-                feedback.textContent = 'Try again! Drag the skills to their matching competency areas.';
+                feedback.textContent = 'Not quite right. Try again! Think about which competency each skill relates to.';
                 feedback.classList.add('error');
             }
-        }
-
-        function updateCorrectCount() {
-            let count = 0;
-            document.querySelectorAll('.skill-item.correct').forEach(() => count++);
-            document.getElementById('correct-count').textContent = count;
         }
 
         function resetGame() {
